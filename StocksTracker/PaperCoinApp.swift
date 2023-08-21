@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct StocksTrackerApp: App {
+struct PaperCoinApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
