@@ -9,6 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @EnvironmentObject private var vm : HomeViewViewModel
+    
     @State private var isShowingPortfolio : Bool = false
     
     var body: some View {
@@ -20,6 +22,18 @@ struct HomeView: View {
             VStack {
                 homeHeaderView
                     .padding(.horizontal)
+                
+                columnTitles
+                
+                if !isShowingPortfolio {
+                    allCoinsList
+                        .transition(.move(edge: .leading))
+                }
+                
+                if isShowingPortfolio {
+                    portfolioCoinsList
+                        .transition(.move(edge: .trailing))
+                }
                 
                 Spacer(minLength: 0)
             }
@@ -53,6 +67,42 @@ extension HomeView {
                 }
         }
     }
+    
+    private var allCoinsList: some View {
+        List {
+            ForEach(vm.allCoins) { coin in
+                CoinRowView(coin: coin, isShowHoldingsColumn: false)
+                    .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
+            }
+        }
+        .listStyle(.plain)
+    }
+    
+    private var portfolioCoinsList: some View {
+        List {
+            ForEach(vm.portfolioCoins) { coin in
+                CoinRowView(coin: coin, isShowHoldingsColumn: true)
+                    .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
+            }
+        }
+        .listStyle(.plain)
+    }
+
+    private var columnTitles : some View {
+        HStack {
+            Text("Coin")
+            Spacer()
+            if isShowingPortfolio {
+             Text("Holdings")
+            }
+            Text("Price")
+                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+        }
+        .font(.caption)
+        .foregroundColor(.theme.secondaryText)
+        .padding(.horizontal)
+
+    }
 }
 
 struct HomeView_Previews: PreviewProvider {
@@ -62,11 +112,13 @@ struct HomeView_Previews: PreviewProvider {
                 HomeView()
                     .toolbar(.hidden, for: .automatic)
             }
+            .environmentObject(dev.homeVM)
             
             NavigationStack {
                 HomeView()
                     .toolbar(.hidden, for: .automatic)
             }
+            .environmentObject(dev.homeVM)
             .preferredColorScheme(.dark)
         }
     }

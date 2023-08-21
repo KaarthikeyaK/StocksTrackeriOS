@@ -9,12 +9,16 @@ import SwiftUI
 
 @main
 struct PaperCoinApp: App {
+    
+    @StateObject private var vm = HomeViewViewModel()
+    
     var body: some Scene {
         WindowGroup {
             NavigationStack {
                 HomeView()
                     .toolbar(.hidden, for: .automatic)
             }
+            .environmentObject(vm)
         }
     }
 }
