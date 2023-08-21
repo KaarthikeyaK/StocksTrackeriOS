@@ -26,8 +26,14 @@ struct HomeView: View {
                 columnTitles
                 
                 if !isShowingPortfolio {
-                    allCoinsList
-                        .transition(.move(edge: .leading))
+                    if vm.isLoading {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    } else {
+                        allCoinsList
+                            .transition(.move(edge: .leading))
+                    }
                 }
                 
                 if isShowingPortfolio {
@@ -72,6 +78,8 @@ extension HomeView {
         List {
             ForEach(vm.allCoins) { coin in
                 CoinRowView(coin: coin, isShowHoldingsColumn: false)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 4)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
             }
         }
@@ -87,13 +95,13 @@ extension HomeView {
         }
         .listStyle(.plain)
     }
-
+    
     private var columnTitles : some View {
         HStack {
             Text("Coin")
             Spacer()
             if isShowingPortfolio {
-             Text("Holdings")
+                Text("Holdings")
             }
             Text("Price")
                 .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
@@ -101,7 +109,7 @@ extension HomeView {
         .font(.caption)
         .foregroundColor(.theme.secondaryText)
         .padding(.horizontal)
-
+        
     }
 }
 
