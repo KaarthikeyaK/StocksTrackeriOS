@@ -25,6 +25,7 @@
 		EDD71D432A93C2F7008C6C2E /* CoinImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD71D422A93C2F7008C6C2E /* CoinImageView.swift */; };
 		EDD71D452A93C45C008C6C2E /* CoinImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD71D442A93C45C008C6C2E /* CoinImageService.swift */; };
 		EDD71D472A93C571008C6C2E /* CoinImageViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD71D462A93C571008C6C2E /* CoinImageViewViewModel.swift */; };
+		EDEE878F2A9529060082483C /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEE878E2A9529060082483C /* LocalFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		EDD71D422A93C2F7008C6C2E /* CoinImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinImageView.swift; sourceTree = "<group>"; };
 		EDD71D442A93C45C008C6C2E /* CoinImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinImageService.swift; sourceTree = "<group>"; };
 		EDD71D462A93C571008C6C2E /* CoinImageViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinImageViewViewModel.swift; sourceTree = "<group>"; };
+		EDEE878E2A9529060082483C /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +186,7 @@
 			isa = PBXGroup;
 			children = (
 				EDD71D3F2A935E98008C6C2E /* NetworkingManager.swift */,
+				EDEE878E2A9529060082483C /* LocalFileManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				EDD71D342A933F9E008C6C2E /* CoinRowView.swift in Sources */,
 				ED70F7572A8B9BC90007685B /* ContentView.swift in Sources */,
 				ED70F76D2A8BA35C0007685B /* HomeView.swift in Sources */,
+				EDEE878F2A9529060082483C /* LocalFileManager.swift in Sources */,
 				EDD71D322A91F1B5008C6C2E /* StockModel.swift in Sources */,
 				EDD71D432A93C2F7008C6C2E /* CoinImageView.swift in Sources */,
 				ED70F7552A8B9BC90007685B /* PaperCoinApp.swift in Sources */,
