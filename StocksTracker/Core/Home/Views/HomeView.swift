@@ -26,14 +26,8 @@ struct HomeView: View {
                 columnTitles
                 
                 if !isShowingPortfolio {
-                    if vm.isLoading {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    } else {
-                        allCoinsList
-                            .transition(.move(edge: .leading))
-                    }
+                    allCoinsList
+                        .transition(.move(edge: .leading))
                 }
                 
                 if isShowingPortfolio {
@@ -75,6 +69,7 @@ extension HomeView {
     }
     
     private var allCoinsList: some View {
+        
         List {
             ForEach(vm.allCoins) { coin in
                 CoinRowView(coin: coin, isShowHoldingsColumn: false)

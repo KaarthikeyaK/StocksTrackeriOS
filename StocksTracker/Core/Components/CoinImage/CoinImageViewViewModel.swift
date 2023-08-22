@@ -33,6 +33,7 @@ class CoinImageViewViewModel: ObservableObject {
                 self?.isLoading = false
             } receiveValue: { [weak self] returnedImage in
                 self?.image = returnedImage
+                self?.isLoading = false
             }
             .store(in: &cancellables)
 
