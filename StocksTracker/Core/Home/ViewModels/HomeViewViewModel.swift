@@ -31,9 +31,11 @@ class HomeViewViewModel : ObservableObject {
 //            }
 //            .store(in: &cancellables)
         
+        // Anytime searchText or dataService.allCoins are changed this subscriber publishes automatically.
         // Updates all coins.
         $searchText
             .combineLatest(dataService.$allCoins)
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main) // Essentially waits 0.5 seconds before running the next statements. It only runs if nothing new is changed for searchText or dataService.$allCoins.
             .map (filterCoins) // Since Map returns the string and the Coin and filterCoins takes those as the input in that order. We don't need to specify that here. We can directly call the map(filterCoins) and that translates to map { text, startingCoins -> [Coin] in filterCoins(text: self.text, startingCoins: self.startingCoins)}
             .sink { [weak self] returnedCoins in
                 self?.allCoins = returnedCoins
