@@ -22,6 +22,8 @@ struct HomeView: View {
             VStack {
                 homeHeaderView
                     .padding(.horizontal)
+
+                SearchBarView(searchText: $vm.searchText)
                 
                 columnTitles
                 
