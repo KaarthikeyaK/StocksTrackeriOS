@@ -22,6 +22,9 @@ struct HomeView: View {
             VStack {
                 homeHeaderView
                     .padding(.horizontal)
+                
+                HomeStatsView(showPortfolio: $isShowingPortfolio)
+                    .environmentObject(vm)
 
                 SearchBarView(searchText: $vm.searchText)
                 
