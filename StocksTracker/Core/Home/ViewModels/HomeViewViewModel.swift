@@ -41,6 +41,7 @@ class HomeViewViewModel : ObservableObject {
         
         // Anytime searchText or dataService.allCoins are changed this subscriber publishes automatically.
         // Updates all coins.
+        
         $searchText
             .combineLatest(dataService.$allCoins)
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main) // Essentially waits 0.5 seconds before running the next statements. It only runs if nothing new is changed for searchText or dataService.$allCoins.
