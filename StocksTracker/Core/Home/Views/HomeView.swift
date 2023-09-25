@@ -11,13 +11,18 @@ struct HomeView: View {
     
     @EnvironmentObject private var vm : HomeViewViewModel
     
-    @State private var isShowingPortfolio : Bool = false
+    @State private var isShowingPortfolio : Bool = false //Animate Right
+    @State private var isShowPortfolioView: Bool = false //New Sheet
     
     var body: some View {
         
         ZStack {
             Color.theme.background
                 .ignoresSafeArea()
+                .sheet(isPresented: $isShowPortfolioView) {
+                    PortfolioView()
+                        .environmentObject(vm)
+                }
             
             VStack {
                 homeHeaderView
@@ -56,6 +61,11 @@ extension HomeView {
                 .background(
                     CircleButtonAnimationView(animate: $isShowingPortfolio)
                 )
+                .onTapGesture {
+                    if isShowingPortfolio {
+                        isShowPortfolioView.toggle()
+                    }
+                }
             Spacer()
             Text(isShowingPortfolio ? "Your Portfolio" : "Live Stock Prices")
                 .animation(.none)
@@ -90,6 +100,8 @@ extension HomeView {
         List {
             ForEach(vm.portfolioCoins) { coin in
                 CoinRowView(coin: coin, isShowHoldingsColumn: true)
+                    .padding(.vertical, 4)
+                    .padding(.horizontal, 4)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
             }
         }

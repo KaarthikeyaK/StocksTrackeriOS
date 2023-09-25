@@ -189,7 +189,7 @@ struct MarketData: Codable {
         
         // Total Market Cap is a dictoinary. So we are getting the total market cap in terms of INR, by using the .first functoin and mapping it to the inr.
         if let item = totalMarketCap.first(where: {$0.key == "inr"}) {
-            return "\(item.value)"
+            return item.value.formattedWithAbbreavations()
         }
         
         return ""
@@ -197,7 +197,7 @@ struct MarketData: Codable {
     
     var volume: String {
         if let item = totalVolume.first(where: {$0.key == "inr"}){
-            return "\(item.value)"
+            return item.value.formattedWithAbbreavations()
         }
         
         return ""
