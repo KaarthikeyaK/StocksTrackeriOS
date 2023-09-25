@@ -40,12 +40,12 @@ class PortfolioDataService {
         
         if let entity = savedEntities.first(where: {$0.coinID == coin.id}) {
             if amount > 0 {
-                update(entity: entity, amount: amount)
+                self.update(entity: entity, amount: amount)
             } else {
-                delete(entity: entity)
+                self.delete(entity: entity)
             }
         } else {
-            add(coin: coin, amount: amount)
+            self.add(coin: coin, amount: amount)
         }
     }
     

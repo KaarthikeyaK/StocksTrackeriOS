@@ -104,7 +104,7 @@ extension PortfolioView {
             Image(systemName: "checkmark")
                 .opacity(showCheckmark ? 1.0 : 0.0)
             Button {
-                //
+                saveButtonPressed()
             } label: {
                 Text("Save".uppercased())
                     .opacity((selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ? 1.0 : 0.0)
@@ -123,10 +123,12 @@ extension PortfolioView {
 
     private func saveButtonPressed() {
         
-        guard let coin = selectedCoin else { return }
+        guard let coin = selectedCoin ,
+        let amount = Double(quantityText)
+        else { return }
         
         // Save to portfolio
-        
+        vm.updatePortfolio(coin: coin, amount: amount)
         // show the checkmark
         withAnimation(.easeIn){
             showCheckmark = true
@@ -145,8 +147,10 @@ extension PortfolioView {
     }
     
     private func removeSelectedCoin(){
-        selectedCoin = nil
-        vm.searchText = ""
+        withAnimation {
+            selectedCoin = nil
+            vm.searchText = ""
+        }
     }
 }
 

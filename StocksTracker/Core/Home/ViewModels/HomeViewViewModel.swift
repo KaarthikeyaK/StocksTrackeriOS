@@ -73,6 +73,10 @@ class HomeViewViewModel : ObservableObject {
             .store(in: &cancellables)
     }
     
+    func updatePortfolio(coin: Coin, amount: Double){
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount)
+    }
+    
     private func filterCoins(text: String, startingCoins: [Coin]) -> [Coin] {
         guard !text.isEmpty else {
             return startingCoins
@@ -84,6 +88,7 @@ class HomeViewViewModel : ObservableObject {
             coin.id.lowercased().contains(lowercasedText)
         }
     }
+    
     
     private func mapGlobalMarketData(marketDataModel: MarketData?) -> [Statistic]{
         var stats: [Statistic] = []
