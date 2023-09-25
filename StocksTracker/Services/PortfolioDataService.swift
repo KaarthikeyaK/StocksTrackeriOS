@@ -40,12 +40,12 @@ class PortfolioDataService {
         
         if let entity = savedEntities.first(where: {$0.coinID == coin.id}) {
             if amount > 0 {
-                self.update(entity: entity, amount: amount)
+                update(entity: entity, amount: amount)
             } else {
-                self.delete(entity: entity)
+                delete(entity: entity)
             }
         } else {
-            self.add(coin: coin, amount: amount)
+            add(coin: coin, amount: amount)
         }
     }
     
@@ -63,6 +63,7 @@ class PortfolioDataService {
         let entity = PortfolioEntity(context: container.viewContext)
         entity.coinID = coin.id
         entity.amount = amount
+        applyChanges()
     }
     
     private func update(entity: PortfolioEntity, amount: Double){

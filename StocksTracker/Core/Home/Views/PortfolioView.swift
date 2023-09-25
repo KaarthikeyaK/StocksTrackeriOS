@@ -36,8 +36,8 @@ struct PortfolioView: View {
                     trailingNavBarButtons
                 }
             }
-            .onChange(of: vm.searchText) { value in
-                if value == " " {
+            .onChange(of: vm.searchText) { oldValue, _ in
+                if oldValue == " " {
                     removeSelectedCoin()
                 }
             }
@@ -50,13 +50,13 @@ extension PortfolioView {
         
         ScrollView(.horizontal, showsIndicators: false){
             LazyHStack(spacing: 10) {
-                ForEach(vm.allCoins) {coin in
+                ForEach(vm.searchText.isEmpty ? vm.portfolioCoins : vm.allCoins) {coin in
                     CoinLogoView(coin: coin)
                         .frame(width: 75)
                         .padding(4)
                         .onTapGesture {
                             withAnimation(.easeIn){
-                                selectedCoin = coin
+                                updateSelectedCoin(coin: coin)
                             }
                         }
                         .background(
@@ -71,6 +71,15 @@ extension PortfolioView {
         }
     }
         
+    private func updateSelectedCoin(coin: Coin){
+        selectedCoin = coin
+        if let portfolioCoin = vm.portfolioCoins.first(where: {$0.id == coin.id}), let amount = portfolioCoin.currentHoldings {
+            quantityText = "\(amount)"
+        } else {
+            quantityText = ""
+        }
+    }
+    
     private var portfolioInputSection: some View {
         VStack(spacing: 20) {
             HStack {
