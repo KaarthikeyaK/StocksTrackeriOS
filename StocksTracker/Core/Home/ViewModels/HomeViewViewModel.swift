@@ -14,7 +14,7 @@ class HomeViewViewModel : ObservableObject {
     
     @Published var allCoins: [Coin] = []
     @Published var portfolioCoins: [Coin] = []
-    
+    @Published var isLoading: Bool = false
     @Published var searchText: String = ""
     
     private let coinDataService = CoinDataService()
@@ -26,6 +26,7 @@ class HomeViewViewModel : ObservableObject {
         addSubscribers()
     }
     
+    //MARK: - Add subscribers.
     func addSubscribers(){
         
         // We are subscribing to all Coins
@@ -61,15 +62,26 @@ class HomeViewViewModel : ObservableObject {
             .map(mapGlobalMarketData)
             .sink { [weak self] returnedStats in
                 self?.statistics = returnedStats
+                self?.isLoading = false
             }
             .store(in: &cancellables)
         
     }
     
+    // MARK: - Update Portfolio
     func updatePortfolio(coin: Coin, amount: Double){
         portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
     
+    // MARK: - Reload Data
+    func reloadData(){
+        isLoading = true
+        coinDataService.getCoins()
+        marketDataService.getData()
+        HapticManager.notification(type: .success)
+    }
+    
+    // MARK: - Filter Coins MAP
     private func filterCoins(text: String, startingCoins: [Coin]) -> [Coin] {
         guard !text.isEmpty else {
             return startingCoins
@@ -82,6 +94,7 @@ class HomeViewViewModel : ObservableObject {
         }
     }
     
+    // MARK: - Coins to Portfolio Coins MAP
     private func mapAllCoinsToPortfolioCoins(allCoins: [Coin], portfolioEntities: [PortfolioEntity]) -> [Coin]{
         allCoins
             .compactMap { coin -> Coin? in
@@ -92,7 +105,7 @@ class HomeViewViewModel : ObservableObject {
             }
     }
     
-    
+    // MARK: - Global Market Data MAP
     private func mapGlobalMarketData(marketDataModel: MarketData?, portfolioCoins: [Coin]) -> [Statistic]{
         var stats: [Statistic] = []
         

@@ -35,14 +35,19 @@ struct HomeView: View {
                 
                 columnTitles
                 
-                if !isShowingPortfolio {
-                    allCoinsList
-                        .transition(.move(edge: .leading))
+                Group {
+                    if !isShowingPortfolio {
+                        allCoinsList
+                            .transition(.move(edge: .leading))
+                    }
+                    
+                    if isShowingPortfolio {
+                        portfolioCoinsList
+                            .transition(.move(edge: .trailing))
+                    }
                 }
-                
-                if isShowingPortfolio {
-                    portfolioCoinsList
-                        .transition(.move(edge: .trailing))
+                .refreshable {
+                    vm.reloadData()
                 }
                 
                 Spacer(minLength: 0)
