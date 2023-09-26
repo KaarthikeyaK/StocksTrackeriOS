@@ -16,11 +16,16 @@ class HomeViewViewModel : ObservableObject {
     @Published var portfolioCoins: [Coin] = []
     @Published var isLoading: Bool = false
     @Published var searchText: String = ""
+    @Published var sortOption: sortOption = .holdings
     
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
     private let portfolioDataService = PortfolioDataService()
     private var cancellables = Set<AnyCancellable>()
+    
+    enum sortOption {
+        case rank, rankReversed, holdings, holdingsReversed, price, priceReversed
+    }
     
     init(){
         addSubscribers()
@@ -30,18 +35,18 @@ class HomeViewViewModel : ObservableObject {
     func addSubscribers(){
         
         // We are subscribing to all Coins
-//        dataService.$allCoins
-//            .sink { [weak self] receivedCoins in
-//                self?.allCoins = receivedCoins
-//            }
-//            .store(in: &cancellables)
+        //        dataService.$allCoins
+        //            .sink { [weak self] receivedCoins in
+        //                self?.allCoins = receivedCoins
+        //            }
+        //            .store(in: &cancellables)
         
         // Anytime searchText or dataService.allCoins are changed this subscriber publishes automatically.
         // Updates all coins.
         $searchText
-            .combineLatest(coinDataService.$allCoins)
+            .combineLatest(coinDataService.$allCoins, $sortOption) // Subscribes to the sort option publisher as well
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main) // Essentially waits 0.5 seconds before running the next statements. It only runs if nothing new is changed for searchText or dataService.$allCoins.
-            .map (filterCoins) // Since Map returns the string and the Coin and filterCoins takes those as the input in that order. We don't need to specify that here. We can directly call the map(filterCoins) and that translates to map { text, startingCoins -> [Coin] in filterCoins(text: self.text, startingCoins: self.startingCoins)}
+            .map (filterAndSortCoins) // Since Map returns the string and the Coin and filterCoins takes those as the input in that order. We don't need to specify that here. We can directly call the map(filterCoins) and that translates to map { text, startingCoins -> [Coin] in filterCoins(text: self.text, startingCoins: self.startingCoins)}
             .sink { [weak self] returnedCoins in
                 self?.allCoins = returnedCoins
             }
@@ -52,10 +57,11 @@ class HomeViewViewModel : ObservableObject {
             .combineLatest(portfolioDataService.$savedEntities)
             .map(mapAllCoinsToPortfolioCoins)
             .sink { [weak self] returnedCoins in
-                self?.portfolioCoins = returnedCoins
+                guard let self = self else {return}
+                self.portfolioCoins = self.sortPortfolioCoins(coins: returnedCoins)
             }
             .store(in: &cancellables)
-
+        
         // This Updates the market data
         marketDataService.$marketData
             .combineLatest($portfolioCoins)
@@ -65,6 +71,7 @@ class HomeViewViewModel : ObservableObject {
                 self?.isLoading = false
             }
             .store(in: &cancellables)
+        
         
     }
     
@@ -79,6 +86,40 @@ class HomeViewViewModel : ObservableObject {
         coinDataService.getCoins()
         marketDataService.getData()
         HapticManager.notification(type: .success)
+    }
+    
+    // MARK: - Filter and Sort Coins MAP
+    private func filterAndSortCoins(text: String, startingCoins: [Coin], sort: sortOption) -> [Coin] {
+        var updatedCoins = filterCoins(text: text, startingCoins: startingCoins)
+        sortCoins(sort: sort, coins: &updatedCoins)
+        return updatedCoins
+    }
+    
+    // MARK: - Sorting Coins
+    // Here are we are inputing an array and outputing a new array. It is creating a new array and we are returning it. Since we are inputing the array of Coin and outputing the same, can sort it in the place and return the same coin model. So we are using the keyword inout. It is a tiny bit efficient than returning a new array, since we are sorting it in the place.
+    private func sortCoins(sort: sortOption, coins: inout [Coin]) {
+        switch sort {
+        case .rank, .holdings:
+            coins.sort(by: {$0.rank < $1.rank})
+        case .rankReversed, .holdingsReversed:
+            coins.sort(by: {$0.rank > $1.rank})
+        case .price:
+            coins.sort(by: {$0.currentPrice > $1.currentPrice})
+        case .priceReversed:
+            coins.sort(by: {$0.currentPrice < $1.currentPrice})
+        }
+    }
+    
+    private func sortPortfolioCoins(coins: [Coin]) -> [Coin] {
+        // Only sort by holdings or reversed holdings if needed.
+        switch self.sortOption {
+        case .holdings:
+            return coins.sorted(by: {$0.currentHoldingsValue > $1.currentHoldingsValue})
+        case .holdingsReversed:
+            return coins.sorted(by: {$0.currentHoldingsValue < $1.currentHoldingsValue})
+        default:
+            return coins
+        }
     }
     
     // MARK: - Filter Coins MAP
@@ -117,13 +158,13 @@ class HomeViewViewModel : ObservableObject {
         let volume = Statistic(title: "24h Volume", value: data.volume)
         let btcDominance = Statistic(title: "BTC Dominance", value: data.btcDominance)
         
-//        let portfolioValue = portfolioCoins.map { coin -> Double in
-//            return coin.currentHoldingsValue
-//        }
+        //        let portfolioValue = portfolioCoins.map { coin -> Double in
+        //            return coin.currentHoldingsValue
+        //        }
         // Does the smae thing as above
         let portfolioValue = portfolioCoins
-                                .map({$0.currentHoldingsValue})
-                                .reduce(0, +)
+            .map({$0.currentHoldingsValue})
+            .reduce(0, +)
         
         let previousValue = portfolioCoins
             .map { coin -> Double in
