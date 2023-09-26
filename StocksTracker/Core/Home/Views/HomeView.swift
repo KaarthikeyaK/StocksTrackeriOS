@@ -14,6 +14,9 @@ struct HomeView: View {
     @State private var isShowingPortfolio : Bool = false //Animate Right
     @State private var isShowPortfolioView: Bool = false //New Sheet
     
+    @State private var selectedCoin: Coin? = nil
+    @State private var isshowDetailView: Bool = false
+    
     var body: some View {
         
         ZStack {
@@ -30,7 +33,7 @@ struct HomeView: View {
                 
                 HomeStatsView(showPortfolio: $isShowingPortfolio)
                     .environmentObject(vm)
-
+                
                 SearchBarView(searchText: $vm.searchText)
                 
                 columnTitles
@@ -54,7 +57,11 @@ struct HomeView: View {
             }
             
         }
-        
+        .background(
+            NavigationLink(destination: DetailLoadingView(coin: $selectedCoin), isActive: $isshowDetailView, label: {
+                EmptyView()
+            })
+        )
     }
 }
 
@@ -92,10 +99,14 @@ extension HomeView {
         
         List {
             ForEach(vm.allCoins) { coin in
+                // We can't use Navigation Link to navigate to the other screen this is due to when the app loads all the coins that are visible to the user will load their detail view the same time and this will slow down the application. The ideal would be the lazynavigationstack, but that is not yet released in the swiftUI. So we have to use a workaround such that the detail view loads only when we click on the coin.
                 CoinRowView(coin: coin, isShowHoldingsColumn: false)
                     .padding(.vertical, 4)
                     .padding(.horizontal, 4)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
             }
         }
         .listStyle(.plain)
@@ -108,6 +119,9 @@ extension HomeView {
                     .padding(.vertical, 4)
                     .padding(.horizontal, 4)
                     .listRowInsets(.init(top: 10, leading: 0, bottom: 10, trailing: 10))
+                    .onTapGesture {
+                        segue(coin: coin)
+                    }
             }
         }
         .listStyle(.plain)
@@ -139,7 +153,7 @@ extension HomeView {
                         vm.sortOption = vm.sortOption == .holdings ? .holdingsReversed : .holdings
                     }
                 }
-
+                
             }
             HStack {
                 Text("Price")
@@ -153,12 +167,19 @@ extension HomeView {
                     vm.sortOption = vm.sortOption == .price ? .priceReversed : .price
                 }
             }
-
+            
         }
         .font(.caption)
         .foregroundColor(.theme.secondaryText)
         .padding(.horizontal)
         
+    }
+}
+
+extension HomeView {
+    private func segue(coin: Coin) {
+        selectedCoin = coin
+        isshowDetailView.toggle()
     }
 }
 

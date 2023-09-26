@@ -49,6 +49,7 @@ extension PortfolioView {
     private var coinLogoListView: some View {
         
         ScrollView(.horizontal, showsIndicators: false){
+            // Lazy creates the items only that are needed and not excess before hand. This is a good practice increasing the speed of the application.
             LazyHStack(spacing: 10) {
                 ForEach(vm.searchText.isEmpty ? vm.portfolioCoins : vm.allCoins) {coin in
                     CoinLogoView(coin: coin)
