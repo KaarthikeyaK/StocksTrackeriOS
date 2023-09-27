@@ -12,6 +12,9 @@ class DetailViewViewModel: ObservableObject {
     
     @Published var overviewStatistics: [Statistic] = []
     @Published var additionalStatistics: [Statistic] = []
+    
+    @Published var coinDescription: String = ""
+    
     @Published var coin: Coin
     
     private let coinDetailDataService: CoinDetailDataService
@@ -28,7 +31,7 @@ class DetailViewViewModel: ObservableObject {
             .combineLatest($coin)
         // Here we are converting the coin detail model into two statistic models, for overview and additional.
             .map(mapDataToStatistics)
-                .sink { [weak self] returnedArrays in
+            .sink { [weak self] returnedArrays in
                 self?.overviewStatistics = returnedArrays.overview
                 self?.additionalStatistics = returnedArrays.additional
             }
