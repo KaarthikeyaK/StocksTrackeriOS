@@ -66,7 +66,9 @@ struct DetailView: View {
                     Divider()
                     
                     additionalGrid
-
+                    
+                    websiteSection
+                    
                 }
                 .padding()
 
@@ -131,27 +133,45 @@ extension DetailView {
     private var coinDescription: some View {
         ZStack {
             if let coinDescription = vm.coinDescription, !coinDescription.isEmpty {
-                VStack(alignment: .leading) {
+                VStack (alignment: .leading) {
                     Text(coinDescription)
                         .lineLimit(showFullDescription ? nil : 3)
                         .font(.callout)
                         .foregroundStyle(Color.theme.secondaryText)
                     
                     Button {
-                        withAnimation(.easeInOut) {
+                        withAnimation(.linear(duration: 0.4)) {
                             showFullDescription.toggle()
                         }
                     } label: {
                         Text(showFullDescription ? "Less" : "Read More...")
                             .font(.caption)
                             .fontWeight(.bold)
-                            .padding(.vertical, 4)
+                            .padding(2)
                             .foregroundStyle(Color.blue)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+    }
+    
+    private var websiteSection: some View {
+        HStack (spacing: 20) {
+            if let websiteString = vm.websiteURL, let url = URL(string: websiteString) {
+                Link("Website", destination: url)
+            }
+            
+            Divider()
+            
+            if let redditString = vm.redditURL, let url = URL(string: redditString) {
+                Link("Reddit", destination: url)
+            }
+        }
+        .tint(Color.blue)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .font(.headline)
+
     }
 }
 
