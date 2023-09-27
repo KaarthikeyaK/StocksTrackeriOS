@@ -46,6 +46,7 @@
 		EDEE878F2A9529060082483C /* LocalFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEE878E2A9529060082483C /* LocalFileManager.swift */; };
 		EDFC52512AC435C60007CA2E /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFC52502AC435C60007CA2E /* ChartView.swift */; };
 		EDFC52532AC43DF80007CA2E /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFC52522AC43DF80007CA2E /* Date.swift */; };
+		EDFC52552AC44ABF0007CA2E /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDFC52542AC44ABF0007CA2E /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,7 @@
 		EDEE878E2A9529060082483C /* LocalFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFileManager.swift; sourceTree = "<group>"; };
 		EDFC52502AC435C60007CA2E /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		EDFC52522AC43DF80007CA2E /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		EDFC52542AC44ABF0007CA2E /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 				EDD71D372A9343CF008C6C2E /* Double.swift */,
 				EDBD89002A9FB63300E95951 /* UIApplication.swift */,
 				EDFC52522AC43DF80007CA2E /* Date.swift */,
+				EDFC52542AC44ABF0007CA2E /* String.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDFC52552AC44ABF0007CA2E /* String.swift in Sources */,
 				ED9FF5DA2AC15922004A74E9 /* PortfolioContainer.xcdatamodeld in Sources */,
 				EDD71D3D2A93590E008C6C2E /* CoinDataService.swift in Sources */,
 				EDD71D342A933F9E008C6C2E /* CoinRowView.swift in Sources */,

@@ -32,6 +32,9 @@ struct DetailView: View {
     private let spacing: CGFloat = 30
     
     @StateObject private var vm: DetailViewViewModel
+    
+    @State private var showFullDescription: Bool = false
+    
     let coin: Coin
     
     init(coin: Coin){
@@ -52,6 +55,8 @@ struct DetailView: View {
                     overviewTitle
                     
                     Divider()
+                    
+                    coinDescription
                     
                     overviewGrid
                     
@@ -120,6 +125,32 @@ extension DetailView {
             
             CoinImageView(coin: vm.coin)
                 .frame(width: 20, height: 20)
+        }
+    }
+    
+    private var coinDescription: some View {
+        ZStack {
+            if let coinDescription = vm.coinDescription, !coinDescription.isEmpty {
+                VStack(alignment: .leading) {
+                    Text(coinDescription)
+                        .lineLimit(showFullDescription ? nil : 3)
+                        .font(.callout)
+                        .foregroundStyle(Color.theme.secondaryText)
+                    
+                    Button {
+                        withAnimation(.easeInOut) {
+                            showFullDescription.toggle()
+                        }
+                    } label: {
+                        Text(showFullDescription ? "Less" : "Read More...")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .padding(.vertical, 4)
+                            .foregroundStyle(Color.blue)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
 }

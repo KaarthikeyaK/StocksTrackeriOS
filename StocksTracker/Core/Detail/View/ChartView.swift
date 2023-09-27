@@ -19,7 +19,7 @@ struct ChartView: View {
     private let startingDate: Date
     private let endingDate: Date
     
-    @State private var percentage: CGFloat = 0
+    @State private var percentage: CGFloat = 1.0
     
     init(coin: Coin){
         data = coin.sparklineIn7D?.price ?? []
@@ -64,8 +64,8 @@ struct ChartView: View {
         }
         .font(.caption)
         .foregroundStyle(Color.theme.secondaryText)
-        .onAppear{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) {
                 withAnimation(.linear(duration: 2.0)) {
                     percentage = 1.0
                 }

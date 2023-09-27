@@ -13,7 +13,9 @@ class DetailViewViewModel: ObservableObject {
     @Published var overviewStatistics: [Statistic] = []
     @Published var additionalStatistics: [Statistic] = []
     
-    @Published var coinDescription: String = ""
+    @Published var coinDescription: String? = nil
+    @Published var websiteURL: String? = nil
+    @Published var redditURL: String? = nil
     
     @Published var coin: Coin
     
@@ -27,6 +29,7 @@ class DetailViewViewModel: ObservableObject {
     }
     
     private func addSubscribers(){
+        
         coinDetailDataService.$coinDetails
             .combineLatest($coin)
         // Here we are converting the coin detail model into two statistic models, for overview and additional.
@@ -34,6 +37,14 @@ class DetailViewViewModel: ObservableObject {
             .sink { [weak self] returnedArrays in
                 self?.overviewStatistics = returnedArrays.overview
                 self?.additionalStatistics = returnedArrays.additional
+            }
+            .store(in: &cancellables)
+        
+        coinDetailDataService.$coinDetails
+            .sink { [weak self] returnedCoinDetails in
+                self?.coinDescription = returnedCoinDetails?.readableDescription
+                self?.websiteURL = returnedCoinDetails?.links?.homepage?.first
+                self?.redditURL = returnedCoinDetails?.links?.subredditURL
             }
             .store(in: &cancellables)
     }
