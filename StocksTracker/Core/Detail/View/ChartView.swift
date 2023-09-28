@@ -65,7 +65,7 @@ struct ChartView: View {
         .font(.caption)
         .foregroundStyle(Color.theme.secondaryText)
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 withAnimation(.linear(duration: 2.0)) {
                     percentage = 1.0
                 }
@@ -98,13 +98,12 @@ extension ChartView {
                     path.addLine(to: CGPoint(x: xPosition, y: yPosition))
                 }
             }
-            .trimmedPath(from: 0, to: percentage)
+            .trimmedPath(from: 0.0, to: percentage)
             .stroke(lineColor, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
             .shadow(color: lineColor, radius: 10, x: 0.0, y: 10)
             .shadow(color: lineColor.opacity(0.5), radius: 10, x: 0.0, y: 20)
             .shadow(color: lineColor.opacity(0.2), radius: 10, x: 0.0, y: 30)
             .shadow(color: lineColor.opacity(0.1), radius: 10, x: 0.0, y: 40)
-            
         }
     }
     

@@ -21,8 +21,9 @@ struct PaperCoinApp: App {
         WindowGroup {
             NavigationStack {
                 HomeView()
-                    .toolbar(.hidden, for: .automatic)
+//                    .toolbar(.hidden, for: .automatic)
             }
+            .navigationBarTitleDisplayMode(.automatic)
             .environmentObject(vm)
         }
     }
