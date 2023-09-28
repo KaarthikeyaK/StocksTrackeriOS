@@ -12,6 +12,8 @@ struct PaperCoinApp: App {
     
     @StateObject private var vm = HomeViewViewModel()
     
+    @State private var showLaunchView: Bool = true
+    
     init(){
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : UIColor(Color.theme.accent)]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor(Color.theme.accent)]
@@ -19,12 +21,23 @@ struct PaperCoinApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                HomeView()
-//                    .toolbar(.hidden, for: .automatic)
+            ZStack {
+                
+                NavigationStack {
+                    HomeView()
+                        .toolbar(.hidden, for: .automatic)
+                }
+                .navigationBarTitleDisplayMode(.automatic)
+                .environmentObject(vm)
+                
+                ZStack {
+                    if showLaunchView {
+                        LaunchView(showLaunchView: $showLaunchView)
+                            .transition(.opacity)
+                    }
+                }
+                .zIndex(2.0)
             }
-            .navigationBarTitleDisplayMode(.automatic)
-            .environmentObject(vm)
         }
     }
 }
