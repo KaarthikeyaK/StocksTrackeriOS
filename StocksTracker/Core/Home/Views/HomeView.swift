@@ -85,7 +85,7 @@ extension HomeView {
                     }
                 }
             Spacer()
-            Text(isShowingPortfolio ? "Your Portfolio" : "Live Stock Prices")
+            Text(isShowingPortfolio ? "Your Portfolio" : "Live Coin Prices")
                 .animation(.none)
                 .font(.title3)
                 .fontWeight(.semibold)

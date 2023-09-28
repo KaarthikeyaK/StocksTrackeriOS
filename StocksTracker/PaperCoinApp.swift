@@ -22,9 +22,8 @@ struct PaperCoinApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                
                 NavigationStack {
-                    HomeView()
+                    RootView()
                         .toolbar(.hidden, for: .automatic)
                 }
                 .navigationBarTitleDisplayMode(.automatic)
